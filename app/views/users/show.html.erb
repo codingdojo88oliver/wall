@@ -1,0 +1,52 @@
+<!-- Wall Page -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="/assets/stylesheets/user.css.scss">
+</head>
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h2>The Wall</h2>
+			<div id="user_panel">
+				<h3><%= @user.first_name %> | <%= link_to('Log off', signout_path) %></h3>	
+			</div>
+		</div>
+		<div id="main_container">
+			<h3>Post a message</h3>
+			<%= simple_form_for :post, :url => "/posts" do |f| %>
+			 	<%= f.input :message , :as => :text, label: false, :input_html => {:cols => 96, :rows => 5}%>
+				<%= f.hidden_field :user_id, :value => "#{@user.id.to_s}" %>
+			 	<%= f.button :submit, "Post a message", :class => 'submit_button' %>
+			<% end %>
+			<div class="clear"></div>
+			<% @posts.each do |post| %>
+				<div id="post_container">
+					<h4><%= post.user.first_name %> - <%= Date.strptime(post.user.created_at.to_s).strftime("%b %d, %Y") %></h4>
+					<p><%= post.message %></p>
+					
+					<% @comments.each do |comment| %>
+						<% if comment.post_id == post.id %>
+							<div class="comment_container">
+								<h4><%= comment.user.first_name %> - <%= Date.strptime(comment.user.created_at.to_s).strftime("%b %d, %Y") %></h4>
+								<p><%= comment.comment %></p>
+							</div>
+						<% end %>
+					<% end %>
+					<div id="comment_area">
+						<%= simple_form_for :comment, :url => "/comments" do |f| %>
+						 	<%= f.input :comment, :as => :text, label: false, :input_html => {:cols => 91}%>
+							<%= f.hidden_field :post_id, :value => "#{post.id.to_s}" %>
+							<%= f.hidden_field :user_id, :value => "#{@user.id.to_s}" %>
+						 	<%= f.button :submit, "Post a Comment", :class => 'submit_button' %>
+						<% end %>
+					</div>
+					<div class="clear"></div>					
+				</div>
+			<% end %>
+		</div>
+	</div>
+</body>
+</html>

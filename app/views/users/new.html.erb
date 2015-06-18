@@ -1,0 +1,46 @@
+<!-- Login and Registration -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="/assets/stylesheets/user.css.scss">
+</head>
+<body>
+	<div id="wrapper">
+		<div id="header">
+			<h2>The Wall</h2>
+		</div>
+		<div id="main_container">
+			<div id="register">
+				<h3>Register</h3>
+				<% if flash[:errors] %>
+					<% flash[:errors].each do |error| %>
+						<p><%= error %></p>
+					<% end %>
+				<% end %>
+				<%= simple_form_for(@user) do |f| %>
+				  <%= f.input :first_name %>
+				  <%= f.input :last_name %>
+				  <%= f.input :email %>
+				  <%= f.input :password %>
+				  <%= f.input :password_confirmation %>
+				  <%= f.button :submit, "Register" %>
+				<% end %>
+			</div>
+		
+			<div id="login">
+				<h3>Login</h3>
+				<% if flash[:error_login] %>
+					<p><%= flash[:error_login] %></p>
+				<% end %>
+				<%= simple_form_for(:session, :url => sessions_path) do |f| %>
+				  <%= f.input :email %>
+				  <%= f.input :password %>
+				  <%= f.button :submit, "Login"%>
+				<% end %>
+			</div>
+		</div>	
+	</div>
+</body>
+</html>
